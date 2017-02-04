@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     usemin = require('gulp-usemin'),
     imagemin = require('gulp-imagemin'),
     rename = require('gulp-rename'),
+    ngannotate = require('gulp-ng-annotate'),
     concat = require('gulp-concat'),
     notify = require('gulp-notify'),
     cache = require('gulp-cache'),
@@ -28,11 +29,11 @@ gulp.task('clean', function() {
 
 gulp.task('usemin',['jshint'], function () {
   return gulp.src('./app/menu.html')
-      .pipe(usemin({
-        css:[minifycss(),rev()],
-        js: [uglify(),rev()]
-      }))
-      .pipe(gulp.dest('dist/'));
+    .pipe(usemin({
+      css:[minifycss(),rev()],
+      js: [ngannotate(),uglify(),rev()]
+    }))
+    .pipe(gulp.dest('dist/'));
 });
 
 // Images
@@ -77,7 +78,7 @@ gulp.task('browser-sync', ['default'], function () {
         // Watch any files in dist/, reload on change
   gulp.watch(['dist/**']).on('change', browserSync.reload);
     });
-    
+
 // Default task
 gulp.task('default', ['clean'], function() {
     gulp.start('usemin', 'imagemin','copyfonts');
